@@ -36,7 +36,9 @@ export const Input = ({
     totalContainer
   ) => {
     const cantidadCm3 =
-      Number(liter) * 1000 + Number(milliliter) + Number(cubicCentimeter);
+      Number(liter) * 1000 +
+      Number(milliliter) / 1000 +
+      Number(cubicCentimeter);
     const porcentaje = (cantidadCm3 / totalContainer) * 100;
     console.log(
       cantidadCm3,
@@ -125,7 +127,7 @@ export const Input = ({
         </InputGroup>
         <InputGroup className="mb-3">
           <InputGroup.Text className="w-50">
-            Agregar mililitros:
+            Agregar milímetros cúbicos:
           </InputGroup.Text>
           <Form.Control
             type="number"
