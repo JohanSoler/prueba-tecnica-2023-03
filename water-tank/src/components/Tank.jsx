@@ -2,6 +2,11 @@ import React from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
+/**
+ * @param {totalCapacityTank} parametro para conocer capacidad total del tanque
+ * @param {waterProcent} parametro para conocer agua contenida dentro del tanque
+ * @returns vista con tanque de agua
+ */
 export const Tank = ({ totalCapacityTank, waterProcent }) => {
   return (
     <div>

@@ -25,4 +25,9 @@ waterTankHistoryController.post = async (req, res) => {
   res.send(newRecord);
 };
 
+waterTankHistoryController.deleteAll = async (req, res) => {
+  await waterTankHistoryModel.deleteMany();
+  res.send("eliminado");
+};
+
 module.exports = waterTankHistoryController;

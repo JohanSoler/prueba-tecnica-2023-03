@@ -31,10 +31,10 @@ Para el back se hizo una rest api sencilla con dos simples acciones, guardar y c
 Desde la carpeta raiz del proyecto abrimos dos terminales, una en la carpeta database y la otra en la carpeta water-tank. 
 
 ### database
-En esta ejecutamos el comando npm start y esperamos la respuesta 'server on port 4000' y 'Database is conected' con esto nos aseguramos el puerto en que esta conectado y que la base de datos mongo esta de forma local y tiene acceso
+En esta ejecutamos el comando npm install y npm start, esperamos la respuesta 'server on port 4000' y 'Database is conected' con esto nos aseguramos el puerto en que esta conectado y que la base de datos mongo esta de forma local y tiene acceso
 
 ### water-tank
-En esta ejecutamos el comando npm start y esperamos que el servidor cargue, de forma predeterminada carga en el servidor 3000 y abrira automaticamente la vista 
+En esta ejecutamos el comando npm install y npm start, esperamos que el servidor cargue, de forma predeterminada carga en el servidor 3000 y abrira automaticamente la vista 
 
 
 

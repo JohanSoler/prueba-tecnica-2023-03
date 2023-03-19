@@ -1,9 +1,29 @@
 import Button from "react-bootstrap/Button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
+import axios from "axios";
 
-export const Input = ({ setTotalCapacityTank, setwaterProcent }) => {
+/**
+ * @param {updateDatabase} Parametro para saber si es necesario actualizar la base de datos por nuevo registro
+ * @param {setUpdateDatabase} Parametro enviar evento de actualizacion de base de datos por eliminacion de registro
+ * @param {waterProcent} Parametro actualizar el porcentaje de agua
+ * @param {showHistory} Parametro para mostrar u ocultar tabla
+ * @param {setTotalCapacityTank} Parametro para actualizar total de capacidad del tanque
+ * @param {setwaterProcent} Parametro para actualizar total procentual de agua del tanque
+ * @param {setShowHistory} Parametro para enviar evento de mostrar u ocultar historial
+ * @returns Vista para el pintado de imputs de base de datos, y opcion de enviado a DB
+ */
+export const Input = ({
+  updateDatabase,
+  waterProcent,
+  showHistory,
+  setTotalCapacityTank,
+  setwaterProcent,
+  setShowHistory,
+  setUpdateDatabase,
+}) => {
+  const [sendDataBase, setSendDataBase] = useState(0);
   const [totalContainer, setTotalContainer] = useState(1000);
   const [liter, setLiter] = useState(0);
   const [cubicCentimeter, setCubicCentimeter] = useState(0);
@@ -28,11 +48,30 @@ export const Input = ({ setTotalCapacityTank, setwaterProcent }) => {
     return porcentaje.toFixed(2);
   };
 
+  useEffect(() => {
+    axios
+      .post("http://localhost:4000/waterTank/history", {
+        totalCapacity: totalContainer,
+        liters: liter,
+        cubicCentimeter: cubicCentimeter,
+        milliliter: milliliter,
+        porcent: waterProcent,
+      })
+      .then((respuesta) => {
+        setUpdateDatabase(updateDatabase + 1);
+        console.log("Guardado en base de datos", respuesta);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [sendDataBase]);
+
   const sendData = () => {
     setTotalCapacityTank(totalContainer);
     setwaterProcent(
       percentageCalculate(liter, milliliter, cubicCentimeter, totalContainer)
     );
+    setSendDataBase(sendDataBase + 1);
   };
 
   return (
@@ -43,12 +82,14 @@ export const Input = ({ setTotalCapacityTank, setwaterProcent }) => {
             Capacidad Total en cm3:
           </InputGroup.Text>
           <Form.Control
-            type="text"
+            type="number"
             value={totalContainer}
             onChange={(e) => {
+              if (e.target.value < 0) {
+                e.target.value = e.target.value * -1;
+              }
               setTotalContainer(e.target.value);
             }}
-            placeholder="Capacidad total"
           />
         </InputGroup>
 
@@ -58,23 +99,28 @@ export const Input = ({ setTotalCapacityTank, setwaterProcent }) => {
         <InputGroup className="mb-3">
           <InputGroup.Text className="w-50">Agregar litros:</InputGroup.Text>
           <Form.Control
-            type="text"
+            pattern="^[1-9]\d*$"
+            type="number"
             value={liter}
             onChange={(e) => {
+              if (e.target.value < 0) {
+                e.target.value = e.target.value * -1;
+              }
               setLiter(e.target.value);
             }}
-            placeholder="Capacidad total"
           />
         </InputGroup>
         <InputGroup className="mb-3">
           <InputGroup.Text className="w-50">Agregar cm3:</InputGroup.Text>
           <Form.Control
-            type="text"
+            type="number"
             value={cubicCentimeter}
             onChange={(e) => {
+              if (e.target.value < 0) {
+                e.target.value = e.target.value * -1;
+              }
               setCubicCentimeter(e.target.value);
             }}
-            placeholder="Capacidad total"
           />
         </InputGroup>
         <InputGroup className="mb-3">
@@ -82,17 +128,28 @@ export const Input = ({ setTotalCapacityTank, setwaterProcent }) => {
             Agregar mililitros:
           </InputGroup.Text>
           <Form.Control
-            type="text"
+            type="number"
             value={milliliter}
             onChange={(e) => {
+              if (e.target.value < 0) {
+                e.target.value = e.target.value * -1;
+              }
               setMilliliter(e.target.value);
             }}
-            placeholder="Capacidad total"
           />
         </InputGroup>
       </Form>
-      <Button variant="primary" onClick={sendData}>
+      <Button className="mx-3" variant="primary" onClick={sendData}>
         Guardar
+      </Button>
+      <Button
+        className="mx-3"
+        variant="primary"
+        onClick={(e) => {
+          setShowHistory(!showHistory);
+        }}
+      >
+        Ver historial
       </Button>
     </div>
   );
